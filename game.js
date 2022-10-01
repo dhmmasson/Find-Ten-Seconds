@@ -77,10 +77,14 @@ class Grid {
         }
     }
     drawSelection() {
-        console.log(this.selected[1])
-        if (this.selected[1])
-            this.selected[1].draw(this.tileSize, { x: 0, y: this.size * this.tileSize })
-        if (this.selected[2]) this.selected[2].draw(this.tileSize, { x: this.tileSize, y: this.size * this.tileSize })
+        const offset = { x: this.size * this.tileSize + this.tileSize, y: this.tileSize }
+        if (this.selected[1]) {
+            this.selected[1].draw(this.tileSize, offset)
+        }
+        if (this.selected[2]) {
+            offset.x += this.tileSize
+            this.selected[2].draw(this.tileSize, offset)
+        }
     }
 }
 
@@ -92,13 +96,11 @@ function setup() {
     colorMode(HSB, 300, 100, 100, 100);
     board = new Grid(10)
 
-    console.log(board)
     //Create a canvas and move its div
     createCanvas(100, 100)
         .parent("#canvasDiv");
     //Resize it
     windowResized()
-
 
     //Some background color 
     background(51);
@@ -106,8 +108,12 @@ function setup() {
 
 //Resize canvas to fill the div
 function windowResized() {
-    size = select("#canvasDiv").size();
-    resizeCanvas(size.width, size.height);
+    const size = select("#canvasDiv").size();
+    let minSize = min(size.width, size.height)
+    minSize = min(size.width - 6 * minSize / board.size, size.height)
+    const tileSize = minSize / board.size
+    resizeCanvas(minSize + 6 * tileSize, minSize);
+    board.tileSize = minSize / board.size
 }
 
 
@@ -120,8 +126,9 @@ function draw() {
 
 
 function mouseClicked() {
-    const tile = board.grid[floor(mouseX / 40)][floor(mouseY / 40)]
-    console.log(tile.i, tile.j, tile.selected)
+    console.log(mouseX, mouseY)
+    const tile = board.grid[floor(mouseX / board.tileSize)][floor(mouseY / board.tileSize)]
+    //Terrible code there...
     if (tile.selected == 0) {
         if (board.selection == 2) {
             board.selected[2].selected = 0
@@ -132,8 +139,9 @@ function mouseClicked() {
         board.selected[tile.selected] = tile
     } else {
         // s : 1 => 2 , s : 2 => 1 
-        console.log(tile.selected, board.selected[1], board.selected[3 - tile.seected])
+
         board.selected[1] = board.selected[3 - tile.selected]
+        board.selected[2] = null
         if (board.selection == 2) board.selected[1].selected = 1
         tile.selected = 0
         board.selection--

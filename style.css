@@ -2,15 +2,25 @@ html,
 body {
     height: 100%;
     width: 100%;
+    background: rgb(68, 102, 110);
 }
 
 body {
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 #canvasDiv {
     width: 100%;
-    background: rgb(68, 102, 110);
+
     flex-grow: 1;
+
+    display: flex;
+
+    /* This centers our sketch horizontally. */
+    justify-content: center;
+
+    /* This centers our sketch vertically. */
+    align-items: center;
 }
