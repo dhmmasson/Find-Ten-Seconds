@@ -1,0 +1,16 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#canvasDiv {
+    width: 100%;
+    background: rgb(68, 102, 110);
+    flex-grow: 1;
+}
