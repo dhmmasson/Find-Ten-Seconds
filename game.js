@@ -69,6 +69,18 @@ function draw() {
     background("#001219");
     board.draw()
     board.drawSelection()
+
+
+    if (board.selection == 2) {
+        const offset = { x: board.size * board.tileSize + 3 * board.tileSize, y: board.tileSize }
+
+        let keywords = Array.from(board.selected[1].keywords).filter(e => e.score).filter(e => board.selected[2].keywords.has(e)).map(e => e.name)
+
+        fill("#E9D8A6")
+        textSize(board.tileSize / 4);
+        textAlign(LEFT, TOP);
+        text(keywords.join(", "), offset.x, offset.y, board.tileSize * 2, board.tileSize)
+    }
 }
 
 
@@ -92,7 +104,8 @@ function mouseClicked() {
         tile.selected = 0
         board.selection--
     }
-    console.log(tile.i, tile.j, tile.selected)
+    console.log(tile.i, tile.j, tile.selected, tile.keywords)
+
 
     // prevent default
     return false;

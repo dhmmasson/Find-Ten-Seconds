@@ -5,21 +5,27 @@
 class Tile {
     selected = 0
     stroke = 2
-    foreground = "red"
-    background = "blue"
-    symbol = "A"
+    foregroundColor = "red"
+    backgroundColor = "blue"
+    symbolDisplay = "A"
 
     constructor(i, j, candidates) {
         this.i = i
         this.j = j
-        this.foreground = random(candidates.darkColors).name
-        this.background = random(candidates.lightColors).name
-        this.symbol = random(candidates.symbols).name
+
+        this.foreground = random(candidates.darkColors)
+        this.background = random(candidates.lightColors)
+        this.symbol = random(candidates.symbols)
+        this.foregroundColor = this.foreground.name
+        this.backgroundColor = this.background.name
+        this.symbolDisplay = this.symbol.name
+
+        this.keywords = new Set([this.symbol, this.background, this.background.getAllParents(), this.symbol.getAllParents()].flat())
     }
 
     draw(size, offset) {
         if (!offset) offset = { x: this.i * size, y: this.j * size }
-        fill(this.background)
+        fill(this.backgroundColor)
         strokeWeight(this.stroke);
         stroke(borderColors[this.selected])
         rect(offset.x
@@ -29,9 +35,10 @@ class Tile {
         textAlign(CENTER, CENTER);
         textSize(size / 2);
         strokeWeight(0);
-        fill(this.foreground)
-        text(this.symbol, offset.x + size / 2, offset.y + size / 2);
+        fill(this.foregroundColor)
+        text(this.symbolDisplay, offset.x + size / 2, offset.y + size / 2);
     }
+
 
 
 

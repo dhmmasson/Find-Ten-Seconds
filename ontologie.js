@@ -20,6 +20,10 @@ class Node {
     findChild(name) {
         return this.children.find(c => c.name === name)
     }
+
+    getAllParents() {
+        return this.parents.concat(this.parents.flatMap(p => p.getAllParents()))
+    }
 }
 
 
@@ -30,7 +34,7 @@ function createOntology() {
     const lightColors = []
     const root = new Node("root", 0)
 
-    const Symbol = new Node('Symbol', 1); root.addChild(Symbol)
+    const Symbol = new Node('Symbol', 0); root.addChild(Symbol)
     const Letter = new Node('Letter', 1); Symbol.addChild(Letter)
     const UpperCase = new Node('UpperCase', 1); Letter.addChild(UpperCase)
     const LowerCase = new Node('LowerCase', 1); Letter.addChild(LowerCase)
@@ -120,9 +124,9 @@ function createOntology() {
     // [Orange, "#E86C48"],
     // [Orange, "#E45C3A"]]
 
-    const colors = [[Green, "#00778F"],
-    [Green, "#0A9396"],
-    [Green, "#3B8C7F"],
+    const colors = [[Blue, "#00778F"],
+    [Blue, "#0A9396"],
+    [Blue, "#3B8C7F"],
 
     [Yellow, "#E99700"],
     [Yellow, "#E47507"],
