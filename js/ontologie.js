@@ -46,7 +46,7 @@ function createOntology() {
     const even = new Node('even', 1); Number.addChild(even)
     const prime = new Node('prime', 1); Number.addChild(prime)
 
-    const Color = new Node('Color', 1); root.addChild(Color)
+    const Color = new Node('Color', 0); root.addChild(Color)
     const Red = new Node('Red', 1); Color.addChild(Red)
     const Green = new Node('Green', 1); Color.addChild(Green)
     const Blue = new Node('Blue', 1); Color.addChild(Blue)
@@ -75,7 +75,7 @@ function createOntology() {
     const primeUnder100 = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     for (let number = 0; number < 99; number++) {
         const node = new Node(number, 1)
-        Number.addChild(node)
+        //Number.addChild(node)
         if (number % 2) {
             even.addChild(node)
         } else {
@@ -141,6 +141,26 @@ function createOntology() {
         col.addChild(light)
         lightColors.push(light)
     }
+
+    function computeWeights(node) {
+        node.children.forEach(computeWeights)
+        if (node.children.length === 0) {
+            node.score = 1
+        } else {
+            node.score = node.children.reduce((acc, p) => acc + p.score, 0)
+        }
+    }
+    computeWeights(root)
+
+    function prettyPrint(node, indent = 0) {
+
+        if (node.children.length > 3) console.group(" ".repeat(indent) + node.name + " " + node.score)
+        else console.log(" ".repeat(indent) + node.name + " " + node.score)
+        node.children.forEach(c => prettyPrint(c, indent + 2))
+        if (node.children.length > 3) console.groupEnd()
+    }
+    prettyPrint(root)
+
     return { root, candidates: { lightColors, darkColors, symbols: candidateSymbols } }
 }
 
