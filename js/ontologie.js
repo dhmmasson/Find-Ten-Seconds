@@ -69,7 +69,7 @@ function createOntology() {
 
     //Most was written by copilot...
     for (const letter of "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toLowerCase()) {
-        const node = new Node("letter " + letter, 30)
+        const node = new Node("letter " + letter, 20)
         const nodeU = new Node(letter.toUpperCase(), 0)
         const nodeL = new Node(letter, 0)
         UpperCase.addChild(nodeU)
@@ -91,7 +91,7 @@ function createOntology() {
 
     const primeUnder100 = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     for (let number = 0; number < 99; number++) {
-        const node = new Node(number, 1)
+        const node = new Node(number, 50)
         //Number.addChild(node)
         if (number % 2) {
             odd.addChild(node)

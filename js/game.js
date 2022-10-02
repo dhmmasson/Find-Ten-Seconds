@@ -44,7 +44,7 @@ function draw() {
     background(color(0, 18, 25, 30));
     board.draw()
     board.drawSelection()
-
+    board.drawScore()
 
 
 }
@@ -67,12 +67,33 @@ function mouseClicked() {
         selectionLogic(tile, true)
         if (board.selection.size == 2) {
             const selection = Array.from(board.selection)
+
             board.history.unshift(selection)
             selection.forEach(e => {
                 e.selected = 0
                 board.tiles.delete(e)
                 board.grid[e.i][e.j] = null
+                board.missingTiles.push(e)
             })
+            let { score } = computeScore(selection[0], selection[1])
+            board.roundScore += score
+
+            if (board.history.length >= 10) {
+
+                const tiles = board.history.map(([tile1, tile2]) => [tile1, tile2]).flat()
+                let tileGained = tileGain(board.roundScore)
+                while (board.missingTiles.length > 0 && tileGained > 0) {
+                    const tile = random(board.missingTiles)
+                    board.tiles.add(tile)
+                    board.grid[tile.i][tile.j] = tile
+                    tileGained--
+                }
+                board.totalScore += board.roundScore
+                board.roundScore = 0
+                board.history = []
+            }
+
+            selection.push(score)
             board.selection.clear()
             board.next = null
 
