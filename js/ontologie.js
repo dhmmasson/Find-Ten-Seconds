@@ -58,6 +58,10 @@ function createOntology() {
     const odd = new Node('odd', 5); Number.addChild(odd)
     const even = new Node('even', 5); Number.addChild(even)
     const prime = new Node('prime', 10); Number.addChild(prime)
+    const powerOfTwo = new Node('powerOfTwo', 5); Number.addChild(powerOfTwo)
+    const powerOfThree = new Node('powerOfThree', 5); Number.addChild(powerOfThree)
+    const theAnswerToEverything = new Node('theAnswerToEverything', 42); Number.addChild(theAnswerToEverything)
+    const niceNumber = new Node('Nice!', 69); Number.addChild(niceNumber)
 
     const Color = new Node('Color', 0); root.addChild(Color)
     const Red = new Node('Red', 5); Color.addChild(Red)
@@ -90,6 +94,9 @@ function createOntology() {
 
 
     const primeUnder100 = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+    const listofpowerOfTwo = [1, 2, 4, 8, 16, 32, 64]
+    const listofpowerOfThree = [1, 3, 9, 27, 81, 243, 729]
+
     for (let number = 0; number < 99; number++) {
         const node = new Node(number, 50)
         //Number.addChild(node)
@@ -101,14 +108,25 @@ function createOntology() {
         if (primeUnder100.includes(number)) {
             prime.addChild(node)
         }
+        if (listofpowerOfTwo.includes(number)) {
+            powerOfTwo.addChild(node)
+        }
+        if (listofpowerOfThree.includes(number)) {
+            powerOfThree.addChild(node)
+        }
         //Add number to candidates
         candidateSymbols.push(node)
     }
+    //Copilot knows... this was written by copilot...
+    //niceNumber.addChild(new Node("69", 0))
+    //theAnswerToEverything.addChild(new Node("42", 0))
 
     //Easter Eggs
     Number.addChild(root.findNode("e"))
     Number.addChild(root.findNode("i"))
     Number.addChild(root.findNode("O"))
+    niceNumber.addChild(root.findNode(69))
+    theAnswerToEverything.addChild(root.findNode(42))
     root.findNode(0).addChild(root.findNode("O"))
 
 
