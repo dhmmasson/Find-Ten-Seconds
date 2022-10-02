@@ -1,7 +1,8 @@
 
 class Node {
-    constructor(name, score) {
+    constructor(name, score, value) {
         this.name = name
+        this.value = value
         this.score = score
         this.children = []
         this.parents = []
@@ -24,6 +25,18 @@ class Node {
     getAllParents() {
         return this.parents.concat(this.parents.flatMap(p => p.getAllParents()))
     }
+    findNode(name) {
+        if (this.name === name) return this
+        for (const child of this.children) {
+            const found = child.findNode(name)
+            if (found) return found
+        }
+        return null
+    }
+    map(f) {
+        f(this)
+        this.children.forEach(c => c.map(f))
+    }
 }
 
 
@@ -35,51 +48,55 @@ function createOntology() {
     const root = new Node("root", 0)
 
     const Symbol = new Node('Symbol', 0); root.addChild(Symbol)
-    const Letter = new Node('Letter', 1); Symbol.addChild(Letter)
-    const UpperCase = new Node('UpperCase', 1); Letter.addChild(UpperCase)
-    const LowerCase = new Node('LowerCase', 1); Letter.addChild(LowerCase)
-    const vowel = new Node('vowel', 1); Letter.addChild(vowel)
-    const consonant = new Node('consonant', 1); Letter.addChild(consonant)
+    const Letter = new Node('Letter', 10); Symbol.addChild(Letter)
+    const UpperCase = new Node('UpperCase', 10); root.addChild(UpperCase)
+    const LowerCase = new Node('LowerCase', 10); root.addChild(LowerCase)
+    const vowel = new Node('vowel', 20); Letter.addChild(vowel)
+    const consonant = new Node('consonant', 5); Letter.addChild(consonant)
 
-    const Number = new Node('Number', 1); Symbol.addChild(Number)
-    const odd = new Node('odd', 1); Number.addChild(odd)
-    const even = new Node('even', 1); Number.addChild(even)
-    const prime = new Node('prime', 1); Number.addChild(prime)
+    const Number = new Node('Number', 10); Symbol.addChild(Number)
+    const odd = new Node('odd', 5); Number.addChild(odd)
+    const even = new Node('even', 5); Number.addChild(even)
+    const prime = new Node('prime', 10); Number.addChild(prime)
 
     const Color = new Node('Color', 0); root.addChild(Color)
-    const Red = new Node('Red', 1); Color.addChild(Red)
-    const Green = new Node('Green', 1); Color.addChild(Green)
-    const Blue = new Node('Blue', 1); Color.addChild(Blue)
-    const Yellow = new Node('Yellow', 1); Color.addChild(Yellow)
-    const Orange = new Node('Orange', 1); Color.addChild(Orange)
-    const Purple = new Node('Purple', 1); Color.addChild(Purple)
+    const Red = new Node('Red', 5); Color.addChild(Red)
+    const Green = new Node('Green', 5); Color.addChild(Green)
+    const Blue = new Node('Blue', 5); Color.addChild(Blue)
+    const Yellow = new Node('Yellow', 5); Color.addChild(Yellow)
+    const Orange = new Node('Orange', 5); Color.addChild(Orange)
+    const Purple = new Node('Purple', 5); Color.addChild(Purple)
 
     //Most was written by copilot...
-    for (const letter of "ABCDEFGHIJKLMNOPQRSTUVWXYZ") {
-        const nodeU = new Node(letter, 1)
-        const nodeL = new Node(letter.toLowerCase(), 1)
+    for (const letter of "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toLowerCase()) {
+        const node = new Node("letter " + letter, 30)
+        const nodeU = new Node(letter.toUpperCase(), 0)
+        const nodeL = new Node(letter, 0)
         UpperCase.addChild(nodeU)
         LowerCase.addChild(nodeL)
-        if ("AEIOU".includes(letter)) {
-            vowel.addChild(nodeU)
-            vowel.addChild(nodeL)
+        Letter.addChild(node)
+        node.addChild(nodeU)
+        node.addChild(nodeL)
+        if ("aeiou".includes(letter)) {
+            vowel.addChild(node)
         } else {
-            consonant.addChild(nodeU)
-            consonant.addChild(nodeL)
+            consonant.addChild(node)
         }
         //Add letters to candidates
         candidateSymbols.push(nodeU)
         candidateSymbols.push(nodeL)
     }
 
+
+
     const primeUnder100 = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     for (let number = 0; number < 99; number++) {
         const node = new Node(number, 1)
         //Number.addChild(node)
         if (number % 2) {
-            even.addChild(node)
-        } else {
             odd.addChild(node)
+        } else {
+            even.addChild(node)
         }
         if (primeUnder100.includes(number)) {
             prime.addChild(node)
@@ -88,78 +105,53 @@ function createOntology() {
         candidateSymbols.push(node)
     }
 
-    console.log(root)
+    //Easter Eggs
+    Number.addChild(root.findNode("e"))
+    Number.addChild(root.findNode("i"))
+    Number.addChild(root.findNode("O"))
+    root.findNode(0).addChild(root.findNode("O"))
 
-    // const baseHue = [
-    //     [Red, 0],
-    //     [Green, 100],
-    //     [Blue, 200],
-    //     [Yellow, 60],
-    //     [Orange, 30],
-    //     [Purple, 250]
-    // ]
 
-    // for (const [col, hue] of baseHue) {
-    //     //Do three time 
-    //     for (let i = 0; i < 3; i++) {
-    //         colorMode(HSB, 300, 100, 100, 100);
-    //         light = new Node(color((300 + randomGaussian(hue, 15)) % 300, randomGaussian(45, 15), 85), 1);
-    //         dark = new Node(color((300 + randomGaussian(hue, 15)) % 300, randomGaussian(90, 10), 0), 1);
-    //         col.addChild(light)
-    //         col.addChild(dark)
-    //         lightColors.push(light)
-    //         darkColors.push(dark)
-    //     }
-    // }
-    darkColors.push(new Node("#E9D8A6", 1))
-    // colors = [[Green, "#298880"],
-    // [Green, "#2A9D8F"],
-    // [Green, "#287271"],
+    darkColors.push(new Node("Sandstone", 1, "#E9D8A6"))
+    const colors = [[Blue, "#00778F", "Teal"],
+    [Blue, "#0A9396", "Virdian"],
+    [Blue, "#3B8C7F", "Celadon"],
 
-    // [Yellow, "#E9C46A"],
-    // [Yellow, "#ECBC68"],
-    // [Yellow, "#EFB366"],
+    [Orange, "#E99700", "Gamboge"],
+    [Orange, "#E47507", "Princeton"],
+    [Orange, "#DD6713", "Chocolate"],
 
-    // [Orange, "#EB7C55"],
-    // [Orange, "#E86C48"],
-    // [Orange, "#E45C3A"]]
+    [Red, "#B92113", "Carnelian"],
+    [Red, "#9D1B12", "Rufous"],
+    [Red, "#7A1815", "Maroon"]]
 
-    const colors = [[Blue, "#00778F"],
-    [Blue, "#0A9396"],
-    [Blue, "#3B8C7F"],
-
-    [Yellow, "#E99700"],
-    [Yellow, "#E47507"],
-    [Yellow, "#DD6713"],
-
-    [Red, "#B92113"],
-    [Red, "#9D1B12"],
-    [Red, "#7A1815"]]
-
-    for (const [col, hex] of colors) {
-        light = new Node(color(hex), 1);
+    for (const [col, hex, name] of colors) {
+        light = new Node(name, 10, color(hex));
         col.addChild(light)
         lightColors.push(light)
     }
 
-    function computeWeights(node) {
-        node.children.forEach(computeWeights)
-        if (node.children.length === 0) {
-            node.score = 1
-        } else {
-            node.score = node.score * node.children.reduce((acc, p) => acc + p.score, 0)
-        }
-    }
-    computeWeights(root)
 
-    function prettyPrint(node, indent = 0) {
 
-        if (node.children.length > 3) console.group(" ".repeat(indent) + node.name + " " + node.score)
-        else console.log(" ".repeat(indent) + node.name + " " + node.score)
-        node.children.forEach(c => prettyPrint(c, indent + 2))
-        if (node.children.length > 3) console.groupEnd()
-    }
+    console.log(root)
 
+    prettyPrint(root)
     return { root, candidates: { lightColors, darkColors, symbols: candidateSymbols } }
 }
 
+
+function computeWeights(node) {
+    node.children.forEach(computeWeights)
+    if (node.children.length === 0) {
+        node.score = 1
+    } else {
+        node.score = node.score * (1 + node.children.reduce((acc, p) => acc * p.score, 1))
+    }
+}
+function prettyPrint(node, indent = 0) {
+
+    if (node.children.length > 3) console.groupCollapsed(" ".repeat(indent) + node.name + " " + node.score)
+    else console.log(" ".repeat(indent) + node.name + " " + node.score)
+    node.children.forEach(c => prettyPrint(c, indent + 2))
+    if (node.children.length > 3) console.groupEnd()
+}

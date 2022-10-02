@@ -45,12 +45,12 @@ class Grid {
             const offset = { x: this.size * this.tileSize + 3 * this.tileSize, y: this.tileSize }
             const selection = Array.from(this.selection)
             selection.push(this.next)
-            let keywords = Array.from(selection[0].keywords).filter(e => e.score).filter(e => selection[1].keywords.has(e)).map(e => e.name)
-
+            let keywords = Array.from(selection[0].keywords).filter(e => e.score).filter(e => selection[1].keywords.has(e))
+            let score = keywords.reduce((a, b) => a + b.score, 0)
             fill("#E9D8A6")
-            textSize(this.tileSize / 4);
+            textSize(this.tileSize / 5);
             textAlign(LEFT, TOP);
-            text(keywords.join(", "), offset.x, offset.y, this.tileSize * 2, this.tileSize)
+            text(Math.round(score) + "\n" + keywords.map(e => `${e.name}(${Math.floor(e.score)})`).join(", "), offset.x, offset.y, this.tileSize * 3, this.tileSize)
 
 
 

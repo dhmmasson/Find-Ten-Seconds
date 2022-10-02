@@ -16,8 +16,8 @@ class Tile {
         this.foreground = random(candidates.darkColors)
         this.background = random(candidates.lightColors)
         this.symbol = random(candidates.symbols)
-        this.foregroundColor = this.foreground.name
-        this.backgroundColor = this.background.name
+        this.foregroundColor = this.foreground.value
+        this.backgroundColor = this.background.value
         this.symbolDisplay = this.symbol.name
 
         this.keywords = new Set([this.symbol, this.background, this.background.getAllParents(), this.symbol.getAllParents()].flat())
