@@ -3,6 +3,9 @@ let board = {}
 const borderColors = ["#001219", "#E9D8A6", "#E9C46A"]
 
 
+function preload() {
+    loadSoundAssets()
+}
 
 function setup() {
     //Clear console between re run
@@ -20,6 +23,8 @@ function setup() {
     windowResized()
     //Some background color 
     background(51);
+    userStartAudio();
+    setUpSound()
 }
 
 //Resize canvas to fill the div
