@@ -44,17 +44,6 @@ function draw() {
     board.draw()
     board.drawSelection()
 
-    if (board.selection.size == 1 && board.next) {
-        const offset = { x: board.size * board.tileSize + 3 * board.tileSize, y: board.tileSize }
-        const selection = Array.from(board.selection)
-        selection.push(board.next)
-        let keywords = Array.from(selection[0].keywords).filter(e => e.score).filter(e => selection[1].keywords.has(e)).map(e => e.name)
-
-        fill("#E9D8A6")
-        textSize(board.tileSize / 4);
-        textAlign(LEFT, TOP);
-        text(keywords.join(", "), offset.x, offset.y, board.tileSize * 2, board.tileSize)
-    }
 }
 
 function mouseMoved() {

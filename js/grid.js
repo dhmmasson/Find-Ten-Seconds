@@ -28,6 +28,18 @@ class Grid {
             offset.x += this.tileSize
             selection[1].draw(this.tileSize, offset)
         }
+
+        if (this.selection.size == 1 && this.next) {
+            const offset = { x: this.size * this.tileSize + 3 * this.tileSize, y: this.tileSize }
+            const selection = Array.from(this.selection)
+            selection.push(this.next)
+            let keywords = Array.from(selection[0].keywords).filter(e => e.score).filter(e => selection[1].keywords.has(e)).map(e => e.name)
+
+            fill("#E9D8A6")
+            textSize(this.tileSize / 4);
+            textAlign(LEFT, TOP);
+            text(keywords.join(", "), offset.x, offset.y, this.tileSize * 2, this.tileSize)
+        }
     }
 }
 
