@@ -17,6 +17,10 @@ class Grid {
         this.grid.flat().forEach(t => this.tiles.add(t))
     }
 
+    randomTile() {
+        return random(Array.from(this.tiles))
+    }
+
     draw() {
         for (const tile of this.tiles) {
             tile.draw(this.tileSize)

@@ -14,9 +14,9 @@ function setup() {
     //My favorite color mode
     colorMode(HSB, 300, 100, 100, 100);
     const { root, candidates } = createOntology()
-    console.log(candidates)
+
     board = new Grid(10, candidates)
-    console.log(board)
+
     //Create a canvas and move its div
     createCanvas(100, 100)
         .parent("#canvasDiv");
@@ -26,6 +26,30 @@ function setup() {
     background(51);
     userStartAudio();
     setUpSound()
+
+    //Remove a tile every 10 seconds
+    setInterval(() => {
+
+        let tile = board.randomTile()
+        let tries = 10
+
+        while (tile.selected != 0 && tries > 0) {
+            tile = board.randomTile()
+            tries--
+        }
+        if (tries > 0) {
+            board.tiles.delete(tile)
+            board.grid[tile.i][tile.j] = null
+            board.missingTiles.push(tile)
+            try {
+                //play([startTime], [rate], [amp], [cueStart], [duration])
+                elevenLoopB.play(0, 1, .5, 10, 2)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }, 10000)
+
 }
 
 //Resize canvas to fill the div
@@ -41,12 +65,10 @@ function windowResized() {
 //Main drawing function
 function draw() {
     colorMode(RGB, 255, 255, 255, 100);
-    background(color(0, 18, 25, 30));
+    background(color(0, 18, 25, 20));
     board.draw()
     board.drawSelection()
     board.drawScore()
-
-
 }
 
 function mouseMoved() {
@@ -64,6 +86,8 @@ function mouseMoved() {
 function mouseClicked() {
     const tile = convertMouseToTile()
     if (tile) {
+        soundOffset = random([0.31, 2.31, 1.31, 3.31, 2.31, 1.31, 3.31])
+        elevenLoopB.play(0, 1, .5, soundOffset, 1)
         selectionLogic(tile, true)
         if (board.selection.size == 2) {
             const selection = Array.from(board.selection)
@@ -74,6 +98,7 @@ function mouseClicked() {
                 board.tiles.delete(e)
                 board.grid[e.i][e.j] = null
                 board.missingTiles.push(e)
+                elevenLoopB.play(0, 1, .5, 10.5, 2)
             })
             let { score } = computeScore(selection[0], selection[1])
             board.roundScore += score
