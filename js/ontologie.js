@@ -147,7 +147,7 @@ function createOntology() {
         if (node.children.length === 0) {
             node.score = 1
         } else {
-            node.score = node.children.reduce((acc, p) => acc + p.score, 0)
+            node.score = node.score * node.children.reduce((acc, p) => acc + p.score, 0)
         }
     }
     computeWeights(root)
@@ -159,7 +159,6 @@ function createOntology() {
         node.children.forEach(c => prettyPrint(c, indent + 2))
         if (node.children.length > 3) console.groupEnd()
     }
-    prettyPrint(root)
 
     return { root, candidates: { lightColors, darkColors, symbols: candidateSymbols } }
 }

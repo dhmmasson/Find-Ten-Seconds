@@ -1,14 +1,19 @@
 let tenLoop, elevenLoop, elevenLoopB, sevenLoop, nineLoop;
+let hat, hat2
 function loadSoundAssets() {
-    soundFormats('mp3', 'ogg');
+    soundFormats('mp3', 'ogg', 'wav');
     tenLoop = loadSound('sounds/10');
     elevenLoop = loadSound('sounds/11');
     elevenLoopB = loadSound('sounds/11b');
     sevenLoop = loadSound('sounds/7');
     nineLoop = loadSound('sounds/9');
+
+    hat = loadSound('sounds/hat');
+    hat2 = loadSound('sounds/hat2');
 }
 
 function setUpSound() {
+    //return
     reverb = new p5.Reverb();
     tenLoop.disconnect();
     elevenLoop.disconnect();
@@ -22,11 +27,11 @@ function setUpSound() {
 
     reverb.drywet(.2);
 
-    setTimeout(() => {
+    /*setTimeout(() => {
         tenLoop.loop(0, tenLoop.rate(), 3, 0, 10);
         tenLoop.loop(0, tenLoop.rate() * 1.4, 3, 0, 10);
         sevenLoop.loop(0, sevenLoop.rate(), 1, 0, 7);
         nineLoop.loop(0, nineLoop.rate(), 1, 0, 9);
         elevenLoop.loop(10, elevenLoop.rate(), 2, 0, 11);
-    }, 1000);
+    }, 1000);*/
 }

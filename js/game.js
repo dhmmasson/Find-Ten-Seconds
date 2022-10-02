@@ -1,5 +1,6 @@
 // Dimitri Masson
 let board = {}
+let history = []
 const borderColors = ["#001219", "#E9D8A6", "#E9C46A"]
 
 
@@ -43,11 +44,11 @@ function draw() {
     board.draw()
     board.drawSelection()
 
-
-    if (board.selection == 2) {
+    if (board.selection.size == 1 && board.next) {
         const offset = { x: board.size * board.tileSize + 3 * board.tileSize, y: board.tileSize }
-
-        let keywords = Array.from(board.selected[1].keywords).filter(e => e.score).filter(e => board.selected[2].keywords.has(e)).map(e => e.name)
+        const selection = Array.from(board.selection)
+        selection.push(board.next)
+        let keywords = Array.from(selection[0].keywords).filter(e => e.score).filter(e => selection[1].keywords.has(e)).map(e => e.name)
 
         fill("#E9D8A6")
         textSize(board.tileSize / 4);
@@ -56,31 +57,59 @@ function draw() {
     }
 }
 
-
-function mouseClicked() {
-
-    console.log(mouseX, mouseY)
-    const tile = board.grid[floor(mouseX / board.tileSize)][floor(mouseY / board.tileSize)]
-    //Terrible code there...
-    if (tile.selected == 0) {
-        if (board.selection == 2) {
-            board.selected[2].selected = 0
-        } else {
-            board.selection++
-        }
-        tile.selected = board.selection
-        board.selected[tile.selected] = tile
+function mouseMoved() {
+    const tile = convertMouseToTile()
+    if (tile) {
+        selectionLogic(tile, false)
     } else {
-        // s : 1 => 2 , s : 2 => 1 
-        board.selected[1] = board.selected[3 - tile.selected]
-        board.selected[2] = null
-        if (board.selection == 2) board.selected[1].selected = 1
-        tile.selected = 0
-        board.selection--
+        if (board.next) {
+            board.next.hover = false
+            board.next = null
+        }
     }
-    console.log(tile.i, tile.j, tile.selected, tile.keywords)
-
-
-    // prevent default
     return false;
 }
+function mouseClicked() {
+    const tile = convertMouseToTile()
+    if (tile) {
+        selectionLogic(tile, true)
+        if (board.selection.size == 2) {
+            const selection = Array.from(board.selection)
+            history.push(selection)
+            selection.forEach(e => {
+                e.selected = 0
+                board.tiles.delete(e)
+                board.grid[e.i][e.j] = null
+            })
+            board.selection.clear()
+            board.next = null
+
+        }
+    }
+
+    return false;
+}
+
+
+function selectionLogic(tile, click) {
+    if (click == false && !tile.selected) {
+        board.next = tile
+        tile.hover = true;
+    }
+    if (click == true) {
+        if (board.selection.has(tile) == false) {
+            board.selection.add(tile)
+            tile.selected = board.selection.size
+        } else {
+            board.selection.delete(tile)
+            tile.selected = 0
+            board.next = tile
+            tile.hover = true
+        }
+    }
+
+}
+
+
+
+
