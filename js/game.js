@@ -40,9 +40,12 @@ function windowResized() {
 
 //Main drawing function
 function draw() {
-    background("#001219");
+    colorMode(RGB, 255, 255, 255, 100);
+    background(color(0, 18, 25, 30));
     board.draw()
     board.drawSelection()
+
+
 
 }
 
@@ -64,7 +67,7 @@ function mouseClicked() {
         selectionLogic(tile, true)
         if (board.selection.size == 2) {
             const selection = Array.from(board.selection)
-            history.push(selection)
+            board.history.unshift(selection)
             selection.forEach(e => {
                 e.selected = 0
                 board.tiles.delete(e)
