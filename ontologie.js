@@ -86,26 +86,57 @@ function createOntology() {
 
     console.log(root)
 
-    const baseHue = [
-        [Red, 0],
-        [Green, 100],
-        [Blue, 200],
-        [Yellow, 60],
-        [Orange, 30],
-        [Purple, 250]
-    ]
+    // const baseHue = [
+    //     [Red, 0],
+    //     [Green, 100],
+    //     [Blue, 200],
+    //     [Yellow, 60],
+    //     [Orange, 30],
+    //     [Purple, 250]
+    // ]
 
-    for (const [col, hue] of baseHue) {
-        //Do three time 
-        for (let i = 0; i < 3; i++) {
-            colorMode(HSB, 300, 100, 100, 100);
-            light = new Node(color((300 + randomGaussian(hue, 15)) % 300, randomGaussian(45, 15), 85), 1);
-            dark = new Node(color((300 + randomGaussian(hue, 15)) % 300, randomGaussian(90, 10), 0), 1);
-            col.addChild(light)
-            col.addChild(dark)
-            lightColors.push(light)
-            darkColors.push(dark)
-        }
+    // for (const [col, hue] of baseHue) {
+    //     //Do three time 
+    //     for (let i = 0; i < 3; i++) {
+    //         colorMode(HSB, 300, 100, 100, 100);
+    //         light = new Node(color((300 + randomGaussian(hue, 15)) % 300, randomGaussian(45, 15), 85), 1);
+    //         dark = new Node(color((300 + randomGaussian(hue, 15)) % 300, randomGaussian(90, 10), 0), 1);
+    //         col.addChild(light)
+    //         col.addChild(dark)
+    //         lightColors.push(light)
+    //         darkColors.push(dark)
+    //     }
+    // }
+    darkColors.push(new Node("#E9D8A6", 1))
+    // colors = [[Green, "#298880"],
+    // [Green, "#2A9D8F"],
+    // [Green, "#287271"],
+
+    // [Yellow, "#E9C46A"],
+    // [Yellow, "#ECBC68"],
+    // [Yellow, "#EFB366"],
+
+    // [Orange, "#EB7C55"],
+    // [Orange, "#E86C48"],
+    // [Orange, "#E45C3A"]]
+
+    const colors = [[Green, "#00778F"],
+    [Green, "#0A9396"],
+    [Green, "#3B8C7F"],
+
+    [Yellow, "#E99700"],
+    [Yellow, "#E47507"],
+    [Yellow, "#DD6713"],
+
+    [Red, "#B92113"],
+    [Red, "#9D1B12"],
+    [Red, "#7A1815"]]
+
+    for (const [col, hex] of colors) {
+        light = new Node(color(hex), 1);
+        col.addChild(light)
+        lightColors.push(light)
     }
     return { root, candidates: { lightColors, darkColors, symbols: candidateSymbols } }
 }
+

@@ -1,6 +1,6 @@
 // Dimitri Masson
 let board = {}
-const borderColors = ["gray", "red", "blue"]
+const borderColors = ["#001219", "#E9D8A6", "#E9C46A"]
 
 class Grid {
     size = 0
@@ -66,7 +66,7 @@ function windowResized() {
 
 //Main drawing function
 function draw() {
-    background(51);
+    background("#001219");
     board.draw()
     board.drawSelection()
 }

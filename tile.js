@@ -24,7 +24,8 @@ class Tile {
         stroke(borderColors[this.selected])
         rect(offset.x
             , offset.y
-            , size - this.stroke, size - this.stroke);
+            , size - this.stroke, size - this.stroke
+            , size / 10);
         textAlign(CENTER, CENTER);
         textSize(size / 2);
         strokeWeight(0);
