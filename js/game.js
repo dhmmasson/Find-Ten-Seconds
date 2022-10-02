@@ -36,7 +36,7 @@ function setup() {
     var elems = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems, { dismissible: true });
     console.clear()
-
+    gui.add({ splashScreen: () => { instances[1].open() } }, 'splashScreen').name("Splash Screen")
     if (localStorage.getItem('readSplash') != 'true') {
         instances[1].open()
         localStorage.setItem('readSplash', true)
