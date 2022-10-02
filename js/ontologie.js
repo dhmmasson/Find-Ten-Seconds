@@ -131,11 +131,6 @@ function createOntology() {
         lightColors.push(light)
     }
 
-
-
-    console.log(root)
-
-    prettyPrint(root)
     return { root, candidates: { lightColors, darkColors, symbols: candidateSymbols } }
 }
 

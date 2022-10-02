@@ -4,13 +4,36 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Every Ten Seconds</title>
+    <title>Find Ten Seconds</title>
 
-    <meta name="robots" content="noindex">
+    <!-- <meta name="robots" content="noindex"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Find Ten Seconds is a compo game by @dhmmasson for Ludum Dare 51.  Find similar tiles on the board, to get points! Every ten pairs the board replenish, but be fast because every ten seconds a tile disappears">
+    <meta name="author" content="dhmmasson, ">
+    <meta name="keywords" content="game,compo,ludumDare,ld51">
+    <meta name="theme-color" content="#001219">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@Massond">
+    <meta name="twitter:site" content="@Massond">
+    <meta name="twitter:title" content="Find Ten Seconds">
+    <meta name="twitter:description"
+        content="Find Ten Seconds is a compo game by @dhmmasson for Ludum Dare 51.  Find similar tiles on the board, to get points! Every ten pairs the board replenish, but be fast because every ten seconds a tile disappears">
+    <meta name="twitter:image" content="https://dhmmasson.github.io/ludumDare51/og-image.png">
+    <meta property="og:type" content="game">
+    <meta property="og:title" content="Every Ten Seconds">
+    <meta property="og:description"
+        content="Find Ten Seconds is a compo game by @dhmmasson for Ludum Dare 51. Find similar tiles on the board, to get points! Every ten pairs the board replenish, but be fast because every ten seconds a tile disappears">
+    <meta property="og:image" content="https://dhmmasson.github.io/ludumDare51/og-image.png">
+    <meta property="og:url" content="https://dhmmasson.github.io/ludumDare51/">
+    <meta property="og:site_name" content="Find Ten Seconds">
+    <meta property="og:locale" content="en_US">
 
-    <link rel="shortcut icon" type="image/x-icon" href="">
-    <!-- <link rel="mask-icon" href="" color="#111"> -->
-    <!-- <link rel="canonical" href=""> -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -18,7 +41,7 @@
 
 <body>
 
-    <h1 class=""> Find ten Seconds </h1>
+    <h1 class=""> Find Ten Seconds </h1>
 
     <div id="canvasDiv"></div>
 
@@ -27,13 +50,63 @@
     <script src="./js/p5.sound.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.7/addons/p5.dom.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.3/dat.gui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.1/svg.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
     <script src="./js/tile.js"></script>
     <script src="./js/grid.js"></script>
     <script src="./js/ontologie.js"></script>
     <script src="./js/sound.js"></script>
     <script src="./js/game.js"></script>
 
+
+    <div id="gameOver" class="modal">
+        <div class="modal-content">
+            <h4>Game Over</h4>
+            <p id="highScore">You should not read that! You don't have finished the game yet.</p>
+        </div>
+        <div class="modal-footer">
+            <a id="gameOverRestart" href="#!" class="modal-close waves-effect waves-green btn-flat startGame">Agree</a>
+        </div>
+    </div>
+
+    <div id="startGame" class="modal">
+        <div class="modal-content">
+            <h3>Welcome to Find Ten Seconds</h3>
+            <p>The aim of the game is to make pairs of <em>similar tiles. You select a tile and then find a second one
+                    that
+                    match as closely as possible. Each round you have to find ten pairs before the board replenish</p>
+            <h4> How to play </h4>
+            <ol class="browser-default">
+                <li> <b>1. Select a first tile:</b>
+                    Pick a tile from the board by clicking it. It will appear selected on the right. Click it again to
+                    deselect it</li>
+                <li> <b>2. Find a second tile:</b> Hover on another tile from the board to see how many points the pair
+                    will get you
+                    <ul>
+                        <li>- An exact match of symbol (same letter, or same number) will get you the most </li>
+                        <li>- A match of color will get you points too </li>
+                        <li>- If you can't find an exact match, you can make a pair of vowels, or odd number. Try to
+                            find
+                            what brings the most point </li>
+                        <li> </li>
+                    </ul>
+                </li>
+                <li> Click on the tile to confirm the selection</li>
+                <li><b>3. Repeat until you find ten pairs</b> </li>
+                <li> <b>4. When you have found 10 pairs:</b> the board will replenish. You get a new tile for every 20
+                    points you got this round.</li>
+                <li> <b>5. The game end when there is no more tiles</b></li>
+            </ol>
+            <h5> Every Ten Seconds a tile disappears from the board</h5>
+            <i>You can configure board size, toggle easy mode (tiles don't disappear), restart the game or mute the
+                music from the controls on the top right</i>
+            <p>There are some hidden easter eggs</p>
+
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat startGame">Start the game</a>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -2,11 +2,37 @@ html,
 body {
     height: 100%;
     width: 100%;
-    background: #001219
+    background: rgb(0, 18, 25)
 }
 
 h1 {
     color: #E9D8A6
+}
+
+.dg li.title,
+.dg.main .close-button.close-bottom {
+    background-color: #001219 !important;
+}
+
+.dg .cr.number input[type=text] {
+    color: #E9D8A6 !important;
+
+}
+
+.dg .c .slider-fg {
+    background-color: #E9D8A6 !important;
+}
+
+.dg .cr.number {
+    border-color: #E9D8A6 !important;
+}
+
+input.browser-default {
+    opacity: 1 !important;
+}
+
+li.save-row {
+    display: none;
 }
 
 body {

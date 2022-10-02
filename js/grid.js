@@ -10,8 +10,10 @@ class Grid {
     missingTiles = []
     roundScore = 0
     totalScore = 0
+    candidates = null
 
     constructor(size, candidates) {
+        this.candidates = candidates
         this.size = size
         this.grid = Array(size).fill(1).map((e, i) => Array(size).fill(1).map((e, j) => new Tile(i, j, candidates)))
         this.grid.flat().forEach(t => this.tiles.add(t))
@@ -22,6 +24,19 @@ class Grid {
     }
 
     draw() {
+        //Draw Grid
+
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                strokeWeight(2);
+                stroke("#001219");
+                fill("#00161f");
+                rect(i * this.tileSize
+                    , j * this.tileSize
+                    , this.tileSize - 2, this.tileSize - 2
+                    , this.tileSize / 10);
+            }
+        }
         for (const tile of this.tiles) {
             tile.draw(this.tileSize)
         }
@@ -71,12 +86,50 @@ class Grid {
             textSize(this.tileSize / 5);
             textAlign(LEFT, TOP);
             text(Math.round(score) + "\n" + keywords.map(e => `${e.name} (${Math.floor(e.score)})`).join(", "), offset.x, offset.y, this.tileSize * 3, this.tileSize)
-
-
-
+        }
+    }
+    replenishBoard() {
+        const tiles = this.history.map(([tile1, tile2]) => [tile1, tile2]).flat()
+        let tileGained = tileGain(this.roundScore)
+        while (this.missingTiles.length > 0 && tileGained > 0) {
+            const tile = random(this.missingTiles)
+            //copilot remove tile from missing tiles array 
+            this.missingTiles.splice(this.missingTiles.indexOf(tile), 1)
+            const newTile = new Tile(tile.i, tile.j, this.candidates)
+            this.tiles.add(newTile)
+            this.grid[newTile.i][newTile.j] = newTile
+            tileGained--
         }
     }
 }
+
+
+function removeTile(tile) {
+    playRemoveTile()
+    tile.selected = 0
+    board.tiles.delete(tile)
+    board.grid[tile.i][tile.j] = null
+    board.missingTiles.push(tile)
+    if (board.tiles.size == 0) {
+        endGame()
+    }
+}
+
+
+
+function removeRandomTile() {
+    if (saveDate.easyMode) return
+    let tile = board.randomTile()
+    if (!tile) return endGame()
+    let tries = 10
+    while (tile.selected != 0 && --tries > 0) {
+        tile = board.randomTile()
+    }
+    if (tries > 0) {
+        removeTile(tile)
+    }
+}
+
 
 function computeScore(tile1, tile2) {
     let keywords = Array.from(tile1.keywords).filter(e => e.score).filter(e => tile2.keywords.has(e))

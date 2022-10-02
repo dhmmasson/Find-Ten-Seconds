@@ -9,14 +9,20 @@ function loadSoundAssets() {
     sevenLoop = loadSound('sounds/7');
     nineLoop = loadSound('sounds/9');
 
-    hat = loadSound('sounds/hat')
-    hat2 = loadSound('sounds/hat2')
+}
+
+const sound = {
+    soundEffectVolume: 1,
+    musicVolume: 1,
+    soundEffectReverb: null,
+    musicReverb: null,
+    removeTile: true
 }
 
 function setUpSound() {
     //return
-    const musicReverb = new p5.Reverb();
-    const soundEffectReverb = new p5.Reverb();
+    sound.musicReverb = new p5.Reverb();
+    sound.soundEffectReverb = new p5.Reverb();
     tenLoop.disconnect();
     tenLoop2.disconnect();
     elevenLoop.disconnect();
@@ -28,18 +34,18 @@ function setUpSound() {
     sevenLoop.pan(.8)
     nineLoop.pan(.8)
 
-    musicReverb.process(tenLoop, 3, 2);
-    musicReverb.process(tenLoop2, 3, 2);
-    musicReverb.process(elevenLoop, 3, 2);
-    musicReverb.process(sevenLoop, 3, 2);
-    musicReverb.process(nineLoop, 3, 2);
+    sound.musicReverb.process(tenLoop, 3, 2);
+    sound.musicReverb.process(tenLoop2, 3, 2);
+    sound.musicReverb.process(elevenLoop, 3, 2);
+    sound.musicReverb.process(sevenLoop, 3, 2);
+    sound.musicReverb.process(nineLoop, 3, 2);
 
-    soundEffectReverb.process(elevenLoopB, 3, 2);
+    sound.soundEffectReverb.process(elevenLoopB, 3, 2);
 
-    musicReverb.drywet(.2);
-    soundEffectReverb.drywet(.2);
+    sound.musicReverb.drywet(.2);
+    sound.soundEffectReverb.drywet(.2);
+    setVolume()
 
-    soundEffectReverb.amp(1)
 
     setTimeout(() => {
         const rate = 2
@@ -65,4 +71,9 @@ function playClick() {
 
 function playRemoveTile() {
     elevenLoopB.play(0, 1, .5, 10.5, 2)
+}
+
+function setVolume() {
+    sound.soundEffectReverb.amp(saveDate.soundEffectVolume)
+    sound.musicReverb.amp(saveDate.musicVolume)
 }

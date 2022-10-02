@@ -2,20 +2,59 @@
 let board = {}
 let history = []
 const borderColors = ["#001219", "#E9D8A6", "#E9C46A"]
-
+let gameOverBanner = null
 
 function preload() {
     loadSoundAssets()
 }
+const saveDate = {
+    size: 10,
+    soundEffectVolume: 1,
+    musicVolume: 1,
+    easyMode: false,
+    bestScore: 1000
+}
 
 function setup() {
-    //Clear console between re run
+
+    let gui = new dat.GUI({ name: 'My GUI' });
+    gui.useLocalStorage = true;
+    gui.open()
+    const boardGUI = gui.addFolder('Board')
+    gui.remember(saveDate)
+    boardGUI.add(saveDate, 'size', 5, 12).step(1).name("Board Size").onChange(() => { })
+    boardGUI.add(saveDate, 'easyMode').name("Easy Mode").onChange(() => { })
+    boardGUI.add({ reload: () => { location.reload() } }, 'reload').name("Restart Game")
+    boardGUI.close()
+    const soundGUI = gui.addFolder('Sound')
+    soundGUI.add(saveDate, 'soundEffectVolume', 0, 1).step(0.01).onChange(setVolume).name("FX Volume")
+    soundGUI.add(saveDate, 'musicVolume', 0, 1).name("Music Volume").step(0.01).onChange(setVolume)
+    soundGUI.close()
+    saveDate.bestScore = localStorage.getItem('highScore') || 0
+
+
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, { dismissible: true });
     console.clear()
+
+    if (localStorage.getItem('readSplash') != 'true') {
+        instances[1].open()
+        localStorage.setItem('readSplash', true)
+    }
+    gameOverBanner = instances[0]
+
+    //Get buttons that have the class startGame and add a listener
+    const startGameButtons = selectAll(".startGame")
+    startGameButtons.forEach(e => e.mousePressed(() => {
+        location.reload()
+    }))
+
+
     //My favorite color mode
     colorMode(HSB, 300, 100, 100, 100);
     const { root, candidates } = createOntology()
 
-    board = new Grid(6, candidates)
+    board = new Grid(saveDate.size, candidates)
 
     //Create a canvas and move its div
     createCanvas(100, 100).parent("#canvasDiv");
@@ -29,7 +68,9 @@ function setup() {
     //Remove a tile every 10 seconds
     setInterval(removeRandomTile, 10000)
 
-
+    //add class browser-default to all inputs
+    const inputs = selectAll("input")
+    inputs.forEach(e => e.addClass("browser-default"))
 }
 
 //Resize canvas to fill the div
@@ -76,7 +117,7 @@ function mouseClicked() {
             board.roundScore += score
 
             if (board.history.length >= 10) {
-                replenishBoard()
+                board.replenishBoard()
                 //Update Score
                 board.totalScore += board.roundScore
                 board.roundScore = 0
@@ -114,39 +155,12 @@ function selectionLogic(tile, click) {
 }
 
 function endGame() {
-    alert("GAME OVER" + board.totalScore)
+    saveDate.bestScore = max(saveDate.bestScore, board.totalScore + board.roundScore)
+    localStorage.setItem('highScore', saveDate.bestScore)
+    //Display a banner that give the high score
+    const banner = select("#highScore")
+    banner.html(`Game Over<br>Score: ${board.totalScore}<br>Best Score: ${saveDate.bestScore}`)
+    gameOverBanner.open()
+
 }
 
-function removeTile(tile) {
-    playRemoveTile()
-    tile.selected = 0
-    board.tiles.delete(tile)
-    board.grid[tile.i][tile.j] = null
-    board.missingTiles.push(tile)
-    if (board.tiles.size == 0) {
-        endGame()
-    }
-}
-
-//Move to grid class
-function replenishBoard() {
-    const tiles = board.history.map(([tile1, tile2]) => [tile1, tile2]).flat()
-    let tileGained = tileGain(board.roundScore)
-    while (board.missingTiles.length > 0 && tileGained > 0) {
-        const tile = random(board.missingTiles)
-        board.tiles.add(tile)
-        board.grid[tile.i][tile.j] = tile
-        tileGained--
-    }
-}
-
-function removeRandomTile() {
-    let tile = board.randomTile()
-    let tries = 10
-    while (tile.selected != 0 && --tries > 0) {
-        tile = board.randomTile()
-    }
-    if (tries > 0) {
-        removeTile(tile)
-    }
-}
