@@ -15,11 +15,10 @@ function setup() {
     colorMode(HSB, 300, 100, 100, 100);
     const { root, candidates } = createOntology()
 
-    board = new Grid(10, candidates)
+    board = new Grid(6, candidates)
 
     //Create a canvas and move its div
-    createCanvas(100, 100)
-        .parent("#canvasDiv");
+    createCanvas(100, 100).parent("#canvasDiv");
     //Resize it
     windowResized()
     //Some background color 
@@ -28,27 +27,8 @@ function setup() {
     setUpSound()
 
     //Remove a tile every 10 seconds
-    setInterval(() => {
+    setInterval(removeRandomTile, 10000)
 
-        let tile = board.randomTile()
-        let tries = 10
-
-        while (tile.selected != 0 && tries > 0) {
-            tile = board.randomTile()
-            tries--
-        }
-        if (tries > 0) {
-            board.tiles.delete(tile)
-            board.grid[tile.i][tile.j] = null
-            board.missingTiles.push(tile)
-            try {
-                //play([startTime], [rate], [amp], [cueStart], [duration])
-                elevenLoopB.play(0, 1, .5, 10, 2)
-            } catch (e) {
-                console.log(e)
-            }
-        }
-    }, 10000)
 
 }
 
@@ -86,35 +66,21 @@ function mouseMoved() {
 function mouseClicked() {
     const tile = convertMouseToTile()
     if (tile) {
-        soundOffset = random([0.31, 2.31, 1.31, 3.31, 2.31, 1.31, 3.31])
-        elevenLoopB.play(0, 1, .5, soundOffset, 1)
+        playClick()
         selectionLogic(tile, true)
         if (board.selection.size == 2) {
             const selection = Array.from(board.selection)
-
             board.history.unshift(selection)
-            selection.forEach(e => {
-                e.selected = 0
-                board.tiles.delete(e)
-                board.grid[e.i][e.j] = null
-                board.missingTiles.push(e)
-                elevenLoopB.play(0, 1, .5, 10.5, 2)
-            })
+            selection.forEach(e => removeTile(e))
             let { score } = computeScore(selection[0], selection[1])
             board.roundScore += score
 
             if (board.history.length >= 10) {
-
-                const tiles = board.history.map(([tile1, tile2]) => [tile1, tile2]).flat()
-                let tileGained = tileGain(board.roundScore)
-                while (board.missingTiles.length > 0 && tileGained > 0) {
-                    const tile = random(board.missingTiles)
-                    board.tiles.add(tile)
-                    board.grid[tile.i][tile.j] = tile
-                    tileGained--
-                }
+                replenishBoard()
+                //Update Score
                 board.totalScore += board.roundScore
                 board.roundScore = 0
+                //Clean History
                 board.history = []
             }
 
@@ -132,22 +98,55 @@ function mouseClicked() {
 function selectionLogic(tile, click) {
     if (click == false && !tile.selected) {
         board.next = tile
-        tile.hover = true;
     }
     if (click == true) {
         if (board.selection.has(tile) == false) {
             board.selection.add(tile)
             tile.selected = board.selection.size
+            board.next = null
         } else {
             board.selection.delete(tile)
             tile.selected = 0
-            board.next = tile
-            tile.hover = true
+            board.next = tile //In case mobile phone without hover
         }
     }
 
 }
 
+function endGame() {
+    alert("GAME OVER" + board.totalScore)
+}
 
+function removeTile(tile) {
+    playRemoveTile()
+    tile.selected = 0
+    board.tiles.delete(tile)
+    board.grid[tile.i][tile.j] = null
+    board.missingTiles.push(tile)
+    if (board.tiles.size == 0) {
+        endGame()
+    }
+}
 
+//Move to grid class
+function replenishBoard() {
+    const tiles = board.history.map(([tile1, tile2]) => [tile1, tile2]).flat()
+    let tileGained = tileGain(board.roundScore)
+    while (board.missingTiles.length > 0 && tileGained > 0) {
+        const tile = random(board.missingTiles)
+        board.tiles.add(tile)
+        board.grid[tile.i][tile.j] = tile
+        tileGained--
+    }
+}
 
+function removeRandomTile() {
+    let tile = board.randomTile()
+    let tries = 10
+    while (tile.selected != 0 && --tries > 0) {
+        tile = board.randomTile()
+    }
+    if (tries > 0) {
+        removeTile(tile)
+    }
+}

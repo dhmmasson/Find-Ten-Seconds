@@ -57,3 +57,12 @@ function setUpSound() {
         elevenLoop.loop(0, elevenLoop.rate(), 2, 0, 11);
     }, 1000);
 }
+
+function playClick() {
+    soundOffset = random([0.31, 2.31, 1.31, 3.31, 2.31, 1.31, 3.31])
+    elevenLoopB.play(0, 1, .5, soundOffset, 1)
+}
+
+function playRemoveTile() {
+    elevenLoopB.play(0, 1, .5, 10.5, 2)
+}
