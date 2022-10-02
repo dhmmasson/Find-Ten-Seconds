@@ -1,61 +1,6 @@
 // Dimitri Masson
 let board = {}
-
 const borderColors = ["gray", "red", "blue"]
-
-const keywords = {
-    symbol: 1,
-    letter: 1,
-    number: 1,
-    A: 1,
-    B: 1,
-    C: 1,
-    D: 1,
-    E: 1,
-    F: 1,
-    G: 1,
-    H: 1,
-    I: 1,
-    J: 1,
-    K: 1,
-    L: 1,
-    M: 1,
-    N: 1,
-    O: 1,
-    P: 1,
-    Q: 1,
-    R: 1,
-    S: 1,
-    T: 1,
-    U: 1,
-    V: 1,
-    W: 1,
-    X: 1,
-    Y: 1,
-    Z: 1,
-
-}
-
-class Tile {
-    selected = 0
-    stroke = 2
-    constructor(i, j) {
-        this.i = i
-        this.j = j
-        this.color = color(random(0, 300), randomGaussian(40, 20), 80);
-    }
-
-    draw(size, offset) {
-        if (!offset) offset = { x: this.i * size, y: this.j * size }
-        fill(this.color)
-        strokeWeight(this.stroke);
-        stroke(borderColors[this.selected])
-        rect(offset.x
-            , offset.y
-            , size - this.stroke, size - this.stroke);
-    }
-
-}
 
 class Grid {
     size = 0
@@ -64,9 +9,9 @@ class Grid {
     selected = []
     grid = [[]]
     tiles = []
-    constructor(size) {
+    constructor(size, candidates) {
         this.size = size
-        this.grid = Array(size).fill(1).map((e, i) => Array(size).fill(1).map((e, j) => new Tile(i, j)))
+        this.grid = Array(size).fill(1).map((e, i) => Array(size).fill(1).map((e, j) => new Tile(i, j, candidates)))
 
         this.grid.flat().forEach(t => this.tiles.push(t))
     }
@@ -91,11 +36,13 @@ class Grid {
 
 function setup() {
     //Clear console between re run
-    console.clear()
+    //console.clear()
     //My favorite color mode
     colorMode(HSB, 300, 100, 100, 100);
-    board = new Grid(10)
-
+    const { root, candidates } = createOntology()
+    console.log(candidates)
+    board = new Grid(10, candidates)
+    console.log(board)
     //Create a canvas and move its div
     createCanvas(100, 100)
         .parent("#canvasDiv");
@@ -139,7 +86,6 @@ function mouseClicked() {
         board.selected[tile.selected] = tile
     } else {
         // s : 1 => 2 , s : 2 => 1 
-
         board.selected[1] = board.selected[3 - tile.selected]
         board.selected[2] = null
         if (board.selection == 2) board.selected[1].selected = 1
@@ -151,3 +97,5 @@ function mouseClicked() {
     // prevent default
     return false;
 }
+
+console.log(root)
