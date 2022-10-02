@@ -5,6 +5,10 @@ body {
     background: #001219
 }
 
+h1 {
+    color: #E9D8A6
+}
+
 body {
     display: flex;
     flex-direction: column;
