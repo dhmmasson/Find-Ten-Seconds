@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13366421.svg)](https://doi.org/10.5281/zenodo.13366421)
 # Find Ten Seconds Tile Game
 
 The goal of the game is to find on a board of tile pairs. 
