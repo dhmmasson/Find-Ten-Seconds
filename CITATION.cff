@@ -1,0 +1,41 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Find Ten Seconds
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Dimitri
+    family-names: Masson
+    orcid: 'https://orcid.org/0000-0002-7072-3146'
+    email: dhm.masson@gmail.com
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.13366421
+repository-code: 'https://github.com/dhmmasson/ludumDare51/tree/v1.0.1'
+url: 'https://dhmmasson.github.io/ludumDare51/'
+abstract: >-
+  "Find Ten Seconds" is a fast-paced tile-matching game
+  where the goal is to pair similar tiles based on matching
+  characteristics. Players select a tile and then search for
+  a second one that closely matches it, earning points based
+  on the similarities between the two tiles. Each round
+  requires finding ten pairs before the board refreshes, and
+  every ten seconds, a tile disappears from the board,
+  adding urgency to the gameplay. The game features
+  customizable settings, hidden easter eggs, and a dynamic
+  soundtrack with an option to mute. Built from scratch
+  using P5.js, "Find Ten Seconds" offers a quick and
+  engaging challenge that rewards sharp observation and
+  quick decision-making.
+keywords:
+  - Ludum Dare
+  - Game
+  - Web
+  - Javascript
+license: MIT
+version: v1.0.1
+date-released: '2022-10-03'
