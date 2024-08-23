@@ -7,7 +7,9 @@ First select a tile and then find a SECOND one.
 When you have found ten *seconds*, new tiles will replace the one you have found. 
 
 You gain points on how similar are the two tiles.
+# Ratings 
 
+![Ratings](https://badges.jaxs.onl/51/find-ten-seconds/badge.svg)
 
 # Cite this repository 
 
